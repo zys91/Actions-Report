@@ -1,4 +1,4 @@
-name: SEU Auto Temperature
+name: SEU Auto Temperature Report
 on:
   schedule:
     - cron: '25 0 * * *'
@@ -7,7 +7,7 @@ on:
     types: started
 
 jobs:
-  Temperature:
+  Temperature Report:
     runs-on: ubuntu-18.04
     if: github.event.repository.owner.id == github.event.sender.id
     
@@ -20,7 +20,7 @@ jobs:
     - name: Run
       env:
         TZ: Asia/Shanghai
-        INFORM: ${{ secrets.SEU_REPORT_INFORM }}
+        SEU_REPORT_INFORM: ${{ secrets.SEU_REPORT_INFORM }}
       run: |
         sudo apt-get install python3-setuptools -y
         git clone https://github.com/zys91/Actions-Report.git
