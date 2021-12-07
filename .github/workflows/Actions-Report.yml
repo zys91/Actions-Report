@@ -1,0 +1,29 @@
+name: SEU Auto Temperature
+on:
+  schedule:
+    - cron: '25 0 * * *'
+    # cron表达式，时区是UTC时间
+  watch:
+    types: started
+
+jobs:
+  Temperature:
+    runs-on: ubuntu-18.04
+    if: github.event.repository.owner.id == github.event.sender.id
+    
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+      with:
+          token: ${{ github.token }}
+          repository: ${{ github.repository }}
+    - name: Run
+      env:
+        TZ: Asia/Shanghai
+        INFORM: ${{ secrets.SEU_REPORT_INFORM }}
+      run: |
+        sudo apt-get install python3-setuptools -y
+        git clone https://github.com/zys91/Actions-Report.git
+        cp -r Actions-Report/* .
+        pip3 install -r requirements.txt
+        python3 auto_report.py
