@@ -4,7 +4,7 @@ import os
 
 class get_inform():
     def __init__(self):
-        self.seu = self.gps_inform = {}
+        self.seu = {}
         self.serverchan = "0"
         self.load_json()
 
