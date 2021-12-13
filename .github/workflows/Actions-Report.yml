@@ -1,7 +1,7 @@
 name: SEU Auto Temperature Report
 on:
   schedule:
-    - cron: '25 0 * * *'
+    - cron: '20 23 * * *'
     # cron表达式，时区是UTC时间
   watch:
     types: started
