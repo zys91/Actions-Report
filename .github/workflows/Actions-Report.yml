@@ -21,6 +21,21 @@ jobs:
       env:
         TZ: Asia/Shanghai
         SEU_REPORT_INFORM: ${{ secrets.SEU_REPORT_INFORM }}
+        BARK: ${{ secrets.BARK }}
+        BARK_PUSH: ${{ secrets.BARK_PUSH }}
+        SCKEY: ${{ secrets.SCKEY }}
+        TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
+        TG_USER_ID: ${{ secrets.TG_USER_ID }}
+        TG_API_HOST: ${{ secrets.TG_API_HOST }}
+        TG_PROXY_IP: ${{ secrets.TG_PROXY_IP }}
+        TG_PROXY_PORT: ${{ secrets.TG_PROXY_PORT }}
+        DD_BOT_ACCESS_TOKEN: ${{ secrets.DD_BOT_ACCESS_TOKEN }}
+        DD_BOT_SECRET: ${{ secrets.DD_BOT_SECRET }}
+        QQ_SKEY: ${{ secrets.QQ_SKEY }}
+        QQ_MODE: ${{ secrets.QQ_MODE }}
+        QYWX_AM: ${{ secrets.QYWX_AM }}
+        QYWX_KEY: ${{ secrets.QYWX_KEY }}
+        PUSH_PLUS_TOKEN: ${{ secrets.PUSH_PLUS_TOKEN }}
       run: |
         sudo apt-get install python3-setuptools -y
         git clone https://github.com/zys91/Actions-Report.git
