@@ -62,47 +62,43 @@ if "QQ_SKEY" in os.environ and os.environ["QQ_SKEY"] and "QQ_MODE" in os.environ
 if "PUSH_PLUS_TOKEN" in os.environ:
     if len(os.environ["PUSH_PLUS_TOKEN"]) > 1:
         PUSH_PLUS_TOKEN = os.environ["PUSH_PLUS_TOKEN"]
-        # print("已获取并使用Env环境 PUSH_PLUS_TOKEN")
+        print("已获取并使用Env环境 PUSH_PLUS_TOKEN")
 # 获取企业微信应用推送 QYWX_AM
 if "QYWX_AM" in os.environ:
     if len(os.environ["QYWX_AM"]) > 1:
         QYWX_AM = os.environ["QYWX_AM"]
-        
-
 if "QYWX_KEY" in os.environ:
     if len(os.environ["QYWX_KEY"]) > 1:
         QYWX_KEY = os.environ["QYWX_KEY"]        
-        # print("已获取并使用Env环境 QYWX_AM")
+        print("已获取并使用Env环境 QYWX_AM")
 
 if BARK:
     notify_mode.append('bark')
-    # print("BARK 推送打开")
+    print("BARK 推送打开")
 if BARK_PUSH:
     notify_mode.append('bark')
-    # print("BARK 推送打开")
+    print("BARK 推送打开")
 if SCKEY:
     notify_mode.append('sc_key')
-    # print("Server酱 推送打开")
+    print("Server酱 推送打开")
 if TG_BOT_TOKEN and TG_USER_ID:
     notify_mode.append('telegram_bot')
-    # print("Telegram 推送打开")
+    print("Telegram 推送打开")
 if DD_BOT_ACCESS_TOKEN and DD_BOT_SECRET:
     notify_mode.append('dingding_bot')
-    # print("钉钉机器人 推送打开")
+    print("钉钉机器人 推送打开")
 if QQ_SKEY and QQ_MODE:
     notify_mode.append('coolpush_bot')
-    # print("QQ机器人 推送打开")
-
+    print("QQ机器人 推送打开")
 if PUSH_PLUS_TOKEN:
     notify_mode.append('pushplus_bot')
-    # print("微信推送Plus机器人 推送打开")
+    print("微信推送Plus机器人 推送打开")
 if QYWX_AM:
     notify_mode.append('wecom_app')
-    # print("企业微信机器人 推送打开")
-
+    print("企业微信机器人 推送打开")
 if QYWX_KEY:
     notify_mode.append('wecom_key')
-    # print("企业微信机器人 推送打开")
+    print("企业微信机器人 推送打开")
 
 
 def message(str_msg):
@@ -144,12 +140,14 @@ def serverJ(title, content):
         print("server酱服务的SCKEY未设置!!\n取消推送")
         return
     print("serverJ服务启动")
+    headers = {'Content-Type': 'application/x-www-form-urlencoded'}
     data = {
         "text": title,
         "desp": content.replace("\n", "\n\n")
     }
-    response = requests.post(f"https://sc.ftqq.com/{SCKEY}.send", data=data).json()
-    if response['errno'] == 0:
+    body = json.dumps(data).encode(encoding='utf-8')
+    response = requests.post(f"https://sctapi.ftqq.com/{SCKEY}.send", data=body, headers=headers).json()
+    if response['code'] == 0:
         print('推送成功！')
     else:
         print('推送失败！')
@@ -222,6 +220,7 @@ def coolpush_bot(title, content):
         print('推送成功！')
     else:
         print('推送失败！')
+
 # push推送
 def pushplus_bot(title, content):
     try:
@@ -246,9 +245,6 @@ def pushplus_bot(title, content):
     except Exception as e:
         print(e)
 
-
-
-print("xxxxxxxxxxxx")
 def wecom_key(title, content):
     print("\n")
     if not QYWX_KEY:
@@ -267,7 +263,6 @@ def wecom_key(title, content):
     print(f"https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key={QYWX_KEY}")
     response = requests.post(f"https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key={QYWX_KEY}", json=data,headers=headers).json()
     print(response)
-
 
 # 企业微信 APP 推送
 def wecom_app(title, content):
@@ -409,11 +404,8 @@ def send_notify(title, content):
             continue
         elif i == 'wecom_key':
             if QYWX_KEY:
-                
                 for i in range(int(len(content)/2000)+1):
-                    wecom_key(title=title, content=content[i*2000:(i+1)*2000])
-                
-                
+                    wecom_key(title=title, content=content[i*2000:(i+1)*2000])  
             else:
                 print('未启用企业微信应用消息推送')
             continue
