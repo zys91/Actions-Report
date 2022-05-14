@@ -28,10 +28,10 @@ if __name__ == '__main__':
         lon = ''
         res = seu_report(username, password, province, city, district, lat, lon)
         if res == "打卡成功!":
-            person_msg = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) + '\n\n体温上报成功' + '\n\n'
+            person_msg = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) + '\n体温上报成功' + '\n'
             send_notify(name + '\t' + '体温上报\t成功', person_msg)
         else:
-            person_msg = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) + '\n\n' + res + '\n\n'
+            person_msg = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) + '\n' + res + '\n'
             send_notify(name + '\t' + '体温上报\t失败', person_msg)
             sys.exit(1)
     except Exception as e:
