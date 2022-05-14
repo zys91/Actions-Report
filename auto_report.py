@@ -7,7 +7,7 @@ import traceback
 from time import sleep
 from numpy import random
 
-from send_notify import *
+from send_notify import send_notify
 from get_inform import get_inform
 from seu_report import seu_report
 
@@ -16,7 +16,7 @@ if __name__ == '__main__':
     username = inform.seu['username']
     password = inform.seu['password']
     name = inform.seu['name']
-    serverchan = inform.serverchan
+
     try:
         sleep(random.uniform(5, 15))
         date_time = datetime.datetime.now().strftime("%Y-%m-%d, %H:%M:%S")
@@ -29,19 +29,12 @@ if __name__ == '__main__':
         res = seu_report(username, password, province, city, district, lat, lon)
         if res == "打卡成功!":
             person_msg = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) + '\n\n体温上报成功' + '\n\n'
-            if serverchan.isspace() or len(serverchan) == 0:
-                print(person_msg)
-            else:
-            	server_post(name + '\t' + '体温上报\t成功', person_msg, serverchan)
+            send_notify(name + '\t' + '体温上报\t成功', person_msg)
         else:
             person_msg = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) + '\n\n' + res + '\n\n'
-            if serverchan.isspace() or len(serverchan) == 0:
-                print(person_msg)
-            else:
-            	server_post(name + '\t' + '体温上报\t失败', person_msg, serverchan)
+            send_notify(name + '\t' + '体温上报\t失败', person_msg)
             sys.exit(1)
     except Exception as e:
         print(traceback.format_exc())
-        if not (serverchan.isspace() or len(serverchan) == 0):
-            server_post(name + '\t' + '体温上报\t失败', e, serverchan)
+        send_notify(name + '\t' + '体温上报\t失败', e)
         sys.exit(1)

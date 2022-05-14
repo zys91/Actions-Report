@@ -1,4 +1,3 @@
-requests
-numpy
-wheel
-PyExecJS
+numpy==1.22.3
+requests==2.27.0
+urllib3==1.26.7
