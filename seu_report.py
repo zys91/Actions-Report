@@ -8,8 +8,11 @@ import time
 
 def login(sess, uname, pwd):
     login_url = 'http://ehall.seu.edu.cn/qljfwapp2/sys/lwReportEpidemicSeu/index.do'
+    sess.headers = {'Content-Type': 'application/x-www-form-urlencoded',
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36'}
     get_login = sess.get(login_url)
     get_login.encoding = 'utf-8'
+
     lt = re.search('name="lt" value="(.*?)"', get_login.text).group(1)
     salt = re.search('id="pwdDefaultEncryptSalt" value="(.*?)"', get_login.text).group(1)
     execution = re.search('name="execution" value="(.*?)"', get_login.text).group(1)
@@ -36,36 +39,30 @@ def login(sess, uname, pwd):
     if re.search("学院", post_login.text):
         return "登陆成功!"
     else:
-        return "登陆失败!"
+        return "登陆失败! 请检查一卡通号和密码..."
 
 
-def get_header(sess, cookie_url):
+def get_info(sess, cookie_url):
     get_cookie = sess.get(cookie_url)
     weu = requests.utils.dict_from_cookiejar(get_cookie.cookies)['_WEU']
     cookie = requests.utils.dict_from_cookiejar(sess.cookies)
     header = {'Referer': 'http://ehall.seu.edu.cn/qljfwapp2/sys/lwReportEpidemicSeu/index.do',
               'Cookie': '_WEU=' + weu + '; MOD_AUTH_CAS=' + cookie['MOD_AUTH_CAS'] + ';'}
-    return header
-
-
-def get_info(sess, header):
+    sess.headers.update(header)
     personal_info_url = 'http://ehall.seu.edu.cn/qljfwapp2/sys/lwReportEpidemicSeu/modules/dailyReport/getMyDailyReportDatas.do'
-    get_personal_info = sess.post(personal_info_url, data={'rysflb': 'BKS', 'pageSize': '10', 'pageNumber': '1'},
-                                  headers=header)
+    get_personal_info = sess.post(personal_info_url, data={'rysflb': 'BKS', 'pageSize': '10', 'pageNumber': '1'})
     return get_personal_info
 
 
 def report(sess, province, city, district, lat, lon, username):
     try:
         cookie_url = 'http://ehall.seu.edu.cn/qljfwapp2/sys/lwReportEpidemicSeu/configSet/noraml/getRouteConfig.do'
-        header = get_header(sess, cookie_url)
-        get_personal_info = get_info(sess, header)
+        get_personal_info = get_info(sess, cookie_url)
         if get_personal_info.status_code == 403:
             raise
     except:
         cookie_url2 = 'http://ehall.seu.edu.cn/qljfwapp2/sys/itpub/common/changeAppRole/lwReportEpidemicSeu/20200223030326996.do'
-        header = get_header(sess, cookie_url2)
-        get_personal_info = get_info(sess, header)
+        get_personal_info = get_info(sess, cookie_url2)
 
     if get_personal_info.status_code == 200:
         print('获取前一日信息成功!')
@@ -108,7 +105,7 @@ def report(sess, province, city, district, lat, lon, username):
         post_info['DZ_DQWZ_CS'] = city
         post_info['DZ_DQWZ_JD'] = lat
     save_url = 'http://ehall.seu.edu.cn/qljfwapp2/sys/lwReportEpidemicSeu/modules/dailyReport/T_REPORT_EPIDEMIC_CHECKIN_SAVE.do'
-    save = sess.post(save_url, data=post_info, headers=header)
+    save = sess.post(save_url, data=post_info)
     if save.status_code == 200:
         print('打卡成功!')
         return '打卡成功!'
