@@ -3,13 +3,11 @@ on:
   schedule:
     - cron: '20 23 * * *'
     # cron表达式，时区是UTC时间
-  watch:
-    types: started
+  workflow_dispatch:
 
 jobs:
   Temperature_Report:
     runs-on: ubuntu-20.04
-    if: github.event.repository.owner.id == github.event.sender.id
     
     steps:
     - name: Checkout Repository
