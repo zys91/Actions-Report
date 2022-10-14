@@ -6,11 +6,10 @@
 2. 进入自己的仓库页面
 3. 首次使用 Github Action 功能，先去 Action 页面启用
 4. 进入 Settings 页面，找到 Secrets 栏目，选择 Actions，点击 New repository secret，Name 和 Value 填写看下方账号配置说明
-5. 点击 Star 收藏按钮可以手动触发一次打卡（你自己点击才有效，其他人点击无效）
-6. 默认定时每天早上 7:30 打卡，可自行在 .github/workflows/Actions-Report.yml 文件中修改
-7. 打卡内容默认和上一次打卡内容保持一致
-8. 支持 Server酱、Bark、Telegram、企业微信等多种方式推送消息，若要启用此功能，参考下方通知配置说明
-9. 仓库如果处于非活动状态达60天，Github Action计划的工作流将会自动禁用，所以需要定期手动启用相应工作流
+5. 默认定时每天早上 7:30 打卡，可自行在 .github/workflows/Actions-Report.yml 文件中修改
+6. 打卡内容默认和上一次打卡内容保持一致
+7. 支持 Server酱、Bark、Telegram、企业微信等多种方式推送消息，若要启用此功能，参考下方通知配置说明
+8. 仓库如果处于非活动状态达60天，Github Action计划的工作流将会自动禁用，所以需要定期手动启用相应工作流
 
 Action Secrets 说明：
 
